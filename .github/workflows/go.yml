@@ -1,0 +1,56 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+#Nome da Rotina a se executada
+name: Go
+
+#Defini quando deve ser executada a rotina que está rodando,
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+#São os passos a passos para executar as tarefas e concluir
+jobs:
+
+#Uma das tarefas a ser executadas e configuradas
+  test:
+  #Tarefa que sera executada de Bulid - ultima versão do ubuntu
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+      # Ultima versao disponivel do GO
+        go-version: 1.19
+        
+    #Copilação do Banco de Dados
+    - name: Build-DB
+    #Executa um command dentro da maquina, maquina ubuntu
+      run: docker-compose build
+      
+    #Copilação do Banco de Dados
+    - name: Create-DB
+    #Executa um command dentro da maquina, maquina ubuntu
+      run: docker-compose up -d
+
+    #Execução dos testes e o command para execução
+    - name: Test
+      run: go test -v main_test.go
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    #Copilação do Codigo
+    - name: Build
+    #Executa um command dentro da maquina, maquina ubuntu
+      run: go build -v main.go
+      
+      
+      
