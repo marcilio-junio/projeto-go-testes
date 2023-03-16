@@ -15,7 +15,7 @@ on:
 jobs: 
 
 ##############################################    ---  DOCKER   ---   ##############################################   
-  docker-DB:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -36,20 +36,10 @@ jobs:
     - name: Create-DB
       run: docker-compose up -d
       
-##############################################    ---  TEST   ---   ##############################################      
-
-#Uma das tarefas a ser executadas e configuradas
-  test:
-  #Tarefa que sera executada de Bulid - ultima versão do ubuntu
-    needs: docker-DB
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
     #Execução dos testes e o command para execução
     - name: Test
       run: go test -v main_test.go
-      
+            
 ##############################################    ---  BUILD   ---   ##############################################
   build:
     needs: test
