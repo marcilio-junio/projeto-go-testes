@@ -26,6 +26,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
+      #Para usar secrets utilizamos ${{ secrets.variavel }}
         go-version: ${{ matrix.go_version }}
     
     #Criação do Banco de Dados e command para execução
